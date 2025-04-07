@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.project.dayoffcalculator.service.DayOffCalculatorService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 @Validated
 @RequestMapping("/api")
@@ -51,14 +53,14 @@ public class DayOffCalculatorController {
             @Digits(integer = 10, fraction = 2) BigDecimal salary,
             @Parameter(
                     name = "daysOff",
-                    description = "Number of days-off to calculate payment for. Must be at least 1",
+                    description = "A list of dates representing a vacation",
                     required = true,
                     schema = @Schema(
-                            type = "integer",
+                            type = "dates in ISO 8601 format",
                             minimum = "1"
                     )
             )
-            @RequestParam @Min(value = 1, message = "Your vacation should be at least 1 day") int daysOff) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> daysOff) {
         BigDecimal payment = dayOffCalculatorService.calculateDaysOffPayment(salary, daysOff);
         return ResponseEntity.ok(payment);
     }
