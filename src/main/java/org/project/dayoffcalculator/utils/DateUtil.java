@@ -29,7 +29,7 @@ public class DateUtil {
         return dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY;
     }
 
-    public static List<LocalDate> generateWorkDays(int count) {
+    public static List<LocalDate> generateWorkDayList(int count) {
         List<LocalDate> workDays = new ArrayList<>();
         LocalDate currentDate = LocalDate.of(2025, Month.JULY, 1);
 
@@ -41,5 +41,14 @@ public class DateUtil {
         }
 
         return workDays;
+    }
+
+    public static String generateWorkDayString(int count) {
+        List<LocalDate> localDates = generateWorkDayList(count);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        localDates.forEach(localDate -> stringBuilder.append(localDate).append(","));
+
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 }

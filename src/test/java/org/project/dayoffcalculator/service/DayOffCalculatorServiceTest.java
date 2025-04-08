@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.project.dayoffcalculator.utils.DateUtil.generateWorkDays;
 
 @SpringBootTest
 class DayOffCalculatorServiceTest {
@@ -27,7 +26,7 @@ class DayOffCalculatorServiceTest {
     @Test
     void fullVacation_getFullSalary() {
         BigDecimal monthlySalary = BigDecimal.valueOf(123000.00).setScale(2, RoundingMode.HALF_UP);
-        List<LocalDate> fullMonth = DateUtil.generateWorkDays(daysOffPerYear);
+        List<LocalDate> fullMonth = DateUtil.generateWorkDayList(daysOffPerYear);
         BigDecimal payment = dayOffCalculatorService.calculateDaysOffPayment(monthlySalary, fullMonth);
         assertEquals(monthlySalary, payment);
     }
@@ -52,5 +51,4 @@ class DayOffCalculatorServiceTest {
         BigDecimal payment = dayOffCalculatorService.calculateDaysOffPayment(monthlySalary, List.of(LocalDate.now()));
         assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), payment);
     }
-
 }

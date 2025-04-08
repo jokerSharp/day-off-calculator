@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -60,7 +61,8 @@ public class DayOffCalculatorController {
                             minimum = "1"
                     )
             )
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> daysOff) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @Size(min = 1, message = "Your vacation should be at least 1 day") List<LocalDate> daysOff) {
         BigDecimal payment = dayOffCalculatorService.calculateDaysOffPayment(salary, daysOff);
         return ResponseEntity.ok(payment);
     }
