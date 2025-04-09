@@ -15,11 +15,18 @@ public class DayOffCalculatorService {
     @Value("${application.dayoff.amount}")
     private int daysOffPerYear;
 
+    private final DateUtil dateUtil;
+
+    public DayOffCalculatorService(DateUtil dateUtil) {
+        this.dateUtil = dateUtil;
+    }
+
     public BigDecimal calculateDaysOffPayment(BigDecimal salary, List<LocalDate> daysOff) {
         long workDaysCounter = daysOff.stream()
-                .filter(dayOff -> !(DateUtil.isHoliday(dayOff) || DateUtil.isWeekend(dayOff)))
+                .filter(dateUtil::isBusinessDay)
                 .count();
         BigDecimal paymentRate = BigDecimal.valueOf(workDaysCounter).divide(BigDecimal.valueOf(daysOffPerYear), 2, RoundingMode.HALF_UP);
+
         return salary.multiply(paymentRate).setScale(2, RoundingMode.HALF_UP);
     }
 }

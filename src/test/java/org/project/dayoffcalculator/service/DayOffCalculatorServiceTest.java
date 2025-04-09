@@ -17,16 +17,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class DayOffCalculatorServiceTest {
 
+    @Value("${application.dayoff.amount}")
+    int daysOffPerYear;
+
     @Autowired
     DayOffCalculatorService dayOffCalculatorService;
 
-    @Value("${application.dayoff.amount}")
-    int daysOffPerYear;
+    @Autowired
+    private DateUtil dateUtil;
 
     @Test
     void fullVacation_getFullSalary() {
         BigDecimal monthlySalary = BigDecimal.valueOf(123000.00).setScale(2, RoundingMode.HALF_UP);
-        List<LocalDate> fullMonth = DateUtil.generateWorkDayList(daysOffPerYear);
+        List<LocalDate> fullMonth = dateUtil.generateBusinessDayList(daysOffPerYear);
         BigDecimal payment = dayOffCalculatorService.calculateDaysOffPayment(monthlySalary, fullMonth);
         assertEquals(monthlySalary, payment);
     }

@@ -28,13 +28,16 @@ class DayOffCalculatorControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private DateUtil dateUtil;
+
     @Test
     void fullVacation_getFullSalary() throws Exception {
         BigDecimal expectedPayment = BigDecimal.valueOf(123000.00);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL)
                         .param("salary", "123000.00")
-                        .param("daysOff", DateUtil.generateWorkDayString(daysOffPerYear)))
+                        .param("daysOff", dateUtil.generateBusinessDayString(daysOffPerYear)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(expectedPayment.toString()));
@@ -46,7 +49,7 @@ class DayOffCalculatorControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL)
                         .param("salary", "123000.10")
-                        .param("daysOff", DateUtil.generateWorkDayString(daysOffPerYear / 2)))
+                        .param("daysOff",  dateUtil.generateBusinessDayString(daysOffPerYear / 2)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(expectedPayment.toString()));

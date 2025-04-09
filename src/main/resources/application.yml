@@ -1,2 +1,4 @@
 application.dayoff.amount: 28
+application.calendar.url: https://xmlcalendar.ru/data/ru/2025/calendar.json
+
 springdoc.swagger-ui.path: /
