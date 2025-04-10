@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.project.dayoffcalculator.service.DayOffCalculatorService;
+import org.project.dayoffcalculator.utils.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +28,8 @@ import java.util.List;
 @RequestMapping("/api")
 @RestController
 public class DayOffCalculatorController {
+
+    private static final Logger log = LoggerFactory.getLogger(DayOffCalculatorController.class);
 
     private final DayOffCalculatorService dayOffCalculatorService;
 
@@ -63,6 +68,7 @@ public class DayOffCalculatorController {
             )
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             @Size(min = 1, message = "Your vacation should be at least 1 day") List<LocalDate> daysOff) {
+        log.info("Get parameters to calculate payment salary={}, daysOff={}", salary, daysOff);
         BigDecimal payment = dayOffCalculatorService.calculateDaysOffPayment(salary, daysOff);
         return ResponseEntity.ok(payment);
     }
