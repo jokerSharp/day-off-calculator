@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.project.dayoffcalculator.service.DayOffCalculatorService;
-import org.project.dayoffcalculator.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -52,7 +51,8 @@ public class DayOffCalculatorController {
                     schema = @Schema(
                             type = "number",
                             format = "floating point number",
-                            minimum = "0.0"
+                            minimum = "0.0",
+                            example = "123000.26"
                     )
             )
             @RequestParam @DecimalMin(value = "0.0", message = "The salary should be a positive number")
@@ -62,8 +62,9 @@ public class DayOffCalculatorController {
                     description = "A list of dates representing a vacation",
                     required = true,
                     schema = @Schema(
-                            type = "dates in ISO 8601 format",
-                            minimum = "1"
+                            type = "string",
+                            format = "date",
+                            example = "2025-04-18, 2025-04-19"
                     )
             )
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
